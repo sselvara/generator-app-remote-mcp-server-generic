@@ -140,19 +140,11 @@ function registerTools (server) {
             inputSchema: {
                 city: z.string().describe('Name of the city to get weather for (e.g., "San Francisco", "New York", "London")')
             },
-            outputSchema: {
-                city: z.string(),
-                country: z.string(),
-                category: z.enum(['sunny', 'cloudy', 'rain', 'snow']),
-                condition: z.string(),
-                temperature: z.number(),
-                humidity: z.number(),
-                windSpeed: z.number(),
-                pressure: z.number(),
-                visibility: z.number(),
-                uvIndex: z.number(),
-                lastUpdated: z.string()
-            },
+            // Note: no outputSchema here. The MCP SDK's zod-to-json-schema conversion stamps a
+            // draft-07 $schema onto declared outputSchemas, which strict 2020-12-only clients
+            // reject client-side before the tool call ever reaches this server (see
+            // https://github.com/modelcontextprotocol/typescript-sdk/issues/2532). structuredContent
+            // below still drives the weather-app UI without needing a declared outputSchema.
             // Links this tool's result to the weather-app UI resource registered below
             _meta: {
                 ui: { resourceUri: WEATHER_RESOURCE_URI },
